@@ -2,6 +2,7 @@ from flask import Flask, request, jsonify, render_template
 import joblib
 import re
 import random
+import os
 
 app = Flask(__name__)
 
@@ -91,4 +92,6 @@ def consejo():
     return jsonify({"consejo": random.choice(consejos)})
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    # Escuchar en el puerto asignado por Render
+    port = int(os.environ.get("PORT", 5000))
+    app.run(host='0.0.0.0', port=port)
