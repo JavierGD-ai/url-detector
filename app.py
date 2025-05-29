@@ -39,16 +39,10 @@ def predecir():
         return jsonify({'error': 'URL requerida'}), 400
 
     try:
-        # Preprocesamiento consistente
         url_procesada = preprocess_url(url)
-        
-        # Vectorización
         X = vectorizer.transform([url_procesada])
-        
-        # Predicción probabilística
         prob_segura = model.predict_proba(X)[0][1] * 100
-        
-        # Clasificación con umbrales optimizados
+
         if prob_segura < 30:
             respuesta = {
                 "resultado": "❌ URL peligrosa",
@@ -77,7 +71,7 @@ def predecir():
                 "icono": "green",
                 "razon": f"Segura ({prob_segura:.1f}% de seguridad)"
             }
-            
+
         return jsonify(respuesta)
 
     except Exception as e:
@@ -92,6 +86,5 @@ def consejo():
     return jsonify({"consejo": random.choice(consejos)})
 
 if __name__ == '__main__':
-    # Escuchar en el puerto asignado por Render
     port = int(os.environ.get("PORT", 5000))
     app.run(host='0.0.0.0', port=port)
