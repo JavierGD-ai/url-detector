@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Detector de URLs Maliciosas</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+  <div class="container">
+    <h1>Detector de URLs Maliciosas</h1>
+    <input type="text" id="urlInput" placeholder="Ingresa una URL..." />
+    <button onclick="buscar()">Buscar</button>
+    <div id="resultado"></div>
+  </div>
+
+  <!-- Burbuja flotante de consejo -->
+  <button class="floating-btn" onclick="mostrarConsejoAleatorio()">💡</button>
+
+  <script src="{{ url_for('static', filename='script.js') }}"></script>
+  <script>
+    async function buscar() {
+      const url = document.getElementById('urlInput').value;
+      const res = await fetch('/predecir', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ url })
+      });
+      const data = await res.json();
+      document.getElementById('resultado').innerText = `${data.resultado}. ${data.razon}`;
+    }
+  </script>
+</body>
+</html>
